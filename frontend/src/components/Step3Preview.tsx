@@ -1,9 +1,5 @@
-import { useState, useMemo } from "react";
-import { Document, Page } from "react-pdf";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
+import { useEffect, useMemo } from "react";
 import { downloadBlob } from "../api";
-import { ErrorBanner } from "./ErrorBanner";
 
 interface Props {
   blob: Blob;
@@ -13,11 +9,11 @@ interface Props {
 }
 
 export function Step3Preview({ blob, type, onBack, onReset }: Props) {
-  const [numPages, setNumPages] = useState<number | null>(null);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pdfError, setPdfError] = useState<string | null>(null);
-
   const blobUrl = useMemo(() => URL.createObjectURL(blob), [blob]);
+
+  useEffect(() => {
+    return () => URL.revokeObjectURL(blobUrl);
+  }, [blobUrl]);
 
   const filename =
     type === "zip"
@@ -49,38 +45,18 @@ export function Step3Preview({ blob, type, onBack, onReset }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      {pdfError && <ErrorBanner message={pdfError} onDismiss={() => setPdfError(null)} />}
-
       <div className="flex items-center justify-between">
         <p className="text-xs text-gray-400 uppercase tracking-wider">
-          Preview — página {pageNumber} {numPages ? `de ${numPages}` : ""}
+          Preview do PDF
         </p>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setPageNumber((p) => Math.max(1, p - 1))}
-            disabled={pageNumber <= 1}
-            className="rounded bg-gray-700 px-3 py-1 text-xs disabled:opacity-40"
-          >
-            ‹
-          </button>
-          <button
-            onClick={() => setPageNumber((p) => Math.min(numPages ?? 1, p + 1))}
-            disabled={pageNumber >= (numPages ?? 1)}
-            className="rounded bg-gray-700 px-3 py-1 text-xs disabled:opacity-40"
-          >
-            ›
-          </button>
-        </div>
       </div>
 
-      <div className="overflow-auto rounded-xl border border-gray-700 bg-gray-900 flex justify-center p-4 max-h-[60vh]">
-        <Document
-          file={blobUrl}
-          onLoadSuccess={({ numPages }) => { setNumPages(numPages); setPageNumber(1); }}
-          onLoadError={(err) => setPdfError(`Erro ao carregar preview: ${err.message}`)}
-        >
-          <Page pageNumber={pageNumber} width={500} />
-        </Document>
+      <div className="overflow-hidden rounded-xl border border-gray-700 bg-gray-900 h-[60vh]">
+        <iframe
+          title="Preview do PDF"
+          src={blobUrl}
+          className="h-full w-full bg-white"
+        />
       </div>
 
       <div className="flex items-center justify-between pt-2">
