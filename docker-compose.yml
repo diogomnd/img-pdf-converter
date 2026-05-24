@@ -4,18 +4,6 @@ services:
     expose:
       - "8000"
 
-  api-tools:
-    build: ./api
-    profiles:
-      - tools
-    user: "1000:1000"
-    environment:
-      RUFF_CACHE_DIR: /tmp/ruff_cache
-    volumes:
-      - ./api:/app
-    working_dir: /app
-    entrypoint: ["ruff"]
-
   frontend:
     build: ./frontend
     ports:

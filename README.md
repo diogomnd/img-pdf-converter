@@ -44,13 +44,6 @@ Run tests:
 pytest
 ```
 
-Lint/format:
-
-```bash
-docker compose --profile tools run --rm api-tools check .
-docker compose --profile tools run --rm api-tools format .
-```
-
 ### Frontend
 
 ```bash
@@ -72,3 +65,7 @@ npm test
 | Max images per request | 50 |
 | Max file size | 20 MB |
 | Accepted formats | JPEG, PNG |
+
+## License
+
+MIT
