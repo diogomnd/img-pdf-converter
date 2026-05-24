@@ -1,9 +1,10 @@
 import io
-import pytest
+import os
+import sys
+
 from PIL import Image
 from pypdf import PdfReader
 
-import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from converter import convert_images
 
@@ -29,7 +30,11 @@ def _page_count(pdf_bytes: bytes) -> int:
 def test_single_image_fit_returns_pdf():
     result = convert_images(
         [("a.jpg", _jpeg())],
-        mode="multi", page_size="fit", orientation="portrait", margin_px=0, quality_dpi=150,
+        mode="multi",
+        page_size="fit",
+        orientation="portrait",
+        margin_px=0,
+        quality_dpi=150,
     )
     assert isinstance(result, bytes)
     assert _page_count(result) == 1
@@ -38,7 +43,11 @@ def test_single_image_fit_returns_pdf():
 def test_multi_mode_two_images_merges_pages():
     result = convert_images(
         [("a.jpg", _jpeg()), ("b.jpg", _jpeg())],
-        mode="multi", page_size="fit", orientation="portrait", margin_px=0, quality_dpi=150,
+        mode="multi",
+        page_size="fit",
+        orientation="portrait",
+        margin_px=0,
+        quality_dpi=150,
     )
     assert isinstance(result, bytes)
     assert _page_count(result) == 2
@@ -47,7 +56,11 @@ def test_multi_mode_two_images_merges_pages():
 def test_single_mode_two_images_returns_list():
     result = convert_images(
         [("a.jpg", _jpeg()), ("b.jpg", _jpeg())],
-        mode="single", page_size="fit", orientation="portrait", margin_px=0, quality_dpi=150,
+        mode="single",
+        page_size="fit",
+        orientation="portrait",
+        margin_px=0,
+        quality_dpi=150,
     )
     assert isinstance(result, list)
     assert len(result) == 2
@@ -58,7 +71,11 @@ def test_single_mode_two_images_returns_list():
 def test_a4_page_size():
     result = convert_images(
         [("a.jpg", _jpeg())],
-        mode="multi", page_size="A4", orientation="portrait", margin_px=0, quality_dpi=150,
+        mode="multi",
+        page_size="A4",
+        orientation="portrait",
+        margin_px=0,
+        quality_dpi=150,
     )
     assert isinstance(result, bytes)
     assert _page_count(result) == 1
@@ -68,7 +85,11 @@ def test_landscape_orientation():
     # portrait image (100x150) with landscape → should rotate
     result = convert_images(
         [("a.jpg", _jpeg(100, 150))],
-        mode="multi", page_size="fit", orientation="landscape", margin_px=0, quality_dpi=150,
+        mode="multi",
+        page_size="fit",
+        orientation="landscape",
+        margin_px=0,
+        quality_dpi=150,
     )
     assert isinstance(result, bytes)
 
@@ -76,7 +97,11 @@ def test_landscape_orientation():
 def test_margin_applied():
     result = convert_images(
         [("a.jpg", _jpeg())],
-        mode="multi", page_size="fit", orientation="portrait", margin_px=20, quality_dpi=150,
+        mode="multi",
+        page_size="fit",
+        orientation="portrait",
+        margin_px=20,
+        quality_dpi=150,
     )
     assert isinstance(result, bytes)
 
@@ -84,7 +109,11 @@ def test_margin_applied():
 def test_png_rgba_converted():
     result = convert_images(
         [("a.png", _png_rgba())],
-        mode="multi", page_size="fit", orientation="portrait", margin_px=0, quality_dpi=150,
+        mode="multi",
+        page_size="fit",
+        orientation="portrait",
+        margin_px=0,
+        quality_dpi=150,
     )
     assert isinstance(result, bytes)
     assert _page_count(result) == 1

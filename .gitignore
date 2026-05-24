@@ -1,6 +1,11 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+api/.ruff_cache/
+api/.pytest_cache/
+api/__pycache__/
+api/tests/__pycache__/
+api/api/
 node_modules/
 dist/
 .env

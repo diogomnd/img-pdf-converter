@@ -1,11 +1,10 @@
-import datetime
 import io
 import zipfile
 from pathlib import Path
 
 import img2pdf
 from PIL import Image
-from pypdf import PdfWriter, PdfReader
+from pypdf import PdfReader, PdfWriter
 
 MM_PER_INCH = 25.4
 PT_PER_MM = 72 / MM_PER_INCH
@@ -69,9 +68,7 @@ def _process_image(
     )
     page_canvas.save(buf, format="JPEG", quality=95)
 
-    layout_fun = img2pdf.get_layout_fun(
-        pagesize=(w_mm * PT_PER_MM, h_mm * PT_PER_MM)
-    )
+    layout_fun = img2pdf.get_layout_fun(pagesize=(w_mm * PT_PER_MM, h_mm * PT_PER_MM))
     return img2pdf.convert(buf.getvalue(), layout_fun=layout_fun)
 
 
@@ -107,6 +104,6 @@ def convert_images(
 def pdfs_to_zip(filenames: list[str], pdfs: list[bytes]) -> bytes:
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
-        for filename, pdf_bytes in zip(filenames, pdfs):
+        for filename, pdf_bytes in zip(filenames, pdfs, strict=False):
             zf.writestr(Path(filename).stem + ".pdf", pdf_bytes)
     return buf.getvalue()
