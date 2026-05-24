@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ArrowRight, FileImage, FileText } from "lucide-react";
 import { useAppState } from "./hooks/useAppState";
 import { convertImages } from "./api";
 import { WizardStepper } from "./components/WizardStepper";
@@ -32,7 +33,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col items-center py-12 px-4">
-      <h1 className="text-2xl font-bold mb-2 tracking-tight">🖼 IMG → PDF</h1>
+      <h1 className="text-2xl font-bold mb-2 tracking-tight flex items-center gap-2">
+        <FileImage className="h-7 w-7 text-blue-400" aria-hidden="true" />
+        <span>IMG</span>
+        <ArrowRight className="h-5 w-5 text-gray-500" aria-hidden="true" />
+        <span>PDF</span>
+        <FileText className="h-7 w-7 text-green-400" aria-hidden="true" />
+      </h1>
       <p className="text-gray-500 text-sm mb-8">Conversor local — sem limites, sem paywall</p>
 
       <div className="w-full max-w-xl">

@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import { Archive, ArrowLeft, Download, FileText } from "lucide-react";
 import { downloadBlob } from "../api";
 
 interface Props {
@@ -23,7 +24,7 @@ export function Step3Preview({ blob, type, onBack, onReset }: Props) {
   if (type === "zip") {
     return (
       <div className="flex flex-col items-center gap-6 py-8">
-        <div className="text-5xl">📦</div>
+        <Archive className="h-14 w-14 text-green-400" aria-hidden="true" />
         <p className="text-gray-300 text-sm">
           {blob.size > 0
             ? `ZIP gerado — ${(blob.size / 1024 / 1024).toFixed(2)} MB`
@@ -33,10 +34,18 @@ export function Step3Preview({ blob, type, onBack, onReset }: Props) {
           onClick={() => downloadBlob(blob, filename)}
           className="rounded-lg bg-green-600 hover:bg-green-500 px-8 py-3 text-sm font-semibold text-white transition-colors"
         >
-          ⬇ Baixar ZIP
+          <span className="inline-flex items-center gap-2">
+            <Download className="h-4 w-4" aria-hidden="true" />
+            Baixar ZIP
+          </span>
         </button>
         <div className="flex gap-3 pt-4">
-          <button onClick={onBack} className="rounded-lg bg-gray-700 hover:bg-gray-600 px-5 py-2 text-sm text-gray-300">← Voltar</button>
+          <button onClick={onBack} className="rounded-lg bg-gray-700 hover:bg-gray-600 px-5 py-2 text-sm text-gray-300">
+            <span className="inline-flex items-center gap-2">
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Voltar
+            </span>
+          </button>
           <button onClick={onReset} className="rounded-lg bg-gray-700 hover:bg-gray-600 px-5 py-2 text-sm text-gray-300">Nova conversão</button>
         </div>
       </div>
@@ -47,7 +56,10 @@ export function Step3Preview({ blob, type, onBack, onReset }: Props) {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <p className="text-xs text-gray-400 uppercase tracking-wider">
-          Preview do PDF
+          <span className="inline-flex items-center gap-2">
+            <FileText className="h-4 w-4 text-green-400" aria-hidden="true" />
+            Preview do PDF
+          </span>
         </p>
       </div>
 
@@ -61,14 +73,22 @@ export function Step3Preview({ blob, type, onBack, onReset }: Props) {
 
       <div className="flex items-center justify-between pt-2">
         <div className="flex gap-3">
-          <button onClick={onBack} className="rounded-lg bg-gray-700 hover:bg-gray-600 px-5 py-2 text-sm text-gray-300">← Voltar</button>
+          <button onClick={onBack} className="rounded-lg bg-gray-700 hover:bg-gray-600 px-5 py-2 text-sm text-gray-300">
+            <span className="inline-flex items-center gap-2">
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Voltar
+            </span>
+          </button>
           <button onClick={onReset} className="rounded-lg bg-gray-700 hover:bg-gray-600 px-5 py-2 text-sm text-gray-300">Nova conversão</button>
         </div>
         <button
           onClick={() => downloadBlob(blob, filename)}
           className="rounded-lg bg-green-600 hover:bg-green-500 px-8 py-2 text-sm font-semibold text-white transition-colors"
         >
-          ⬇ Baixar PDF
+          <span className="inline-flex items-center gap-2">
+            <Download className="h-4 w-4" aria-hidden="true" />
+            Baixar PDF
+          </span>
         </button>
       </div>
     </div>

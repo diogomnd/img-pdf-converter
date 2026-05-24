@@ -1,4 +1,5 @@
 import type { ImageFile } from "../types";
+import { ArrowRight } from "lucide-react";
 import { validateFiles } from "../validation";
 import { DropZone } from "./DropZone";
 import { ImageGrid } from "./ImageGrid";
@@ -46,7 +47,10 @@ export function Step1Upload({ images, onChange, onNext }: Props) {
               onClick={onNext}
               className="rounded-lg bg-blue-600 hover:bg-blue-500 px-6 py-2 text-sm font-semibold text-white transition-colors"
             >
-              Próximo: Opções →
+              <span className="inline-flex items-center gap-2">
+                Próximo: Opções
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </span>
             </button>
           </div>
         </>

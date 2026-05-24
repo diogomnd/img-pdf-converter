@@ -1,4 +1,5 @@
 import { useDropzone } from "react-dropzone";
+import { Upload } from "lucide-react";
 
 interface Props {
   onDrop: (files: File[]) => void;
@@ -21,7 +22,7 @@ export function DropZone({ onDrop }: Props) {
       }`}
     >
       <input {...getInputProps()} />
-      <span className="text-4xl mb-3">⬆</span>
+      <Upload className="mb-3 h-10 w-10 text-blue-400" aria-hidden="true" />
       <p className="text-gray-300 text-sm font-medium">
         {isDragActive ? "Solte as imagens aqui" : "Arraste imagens ou clique para selecionar"}
       </p>

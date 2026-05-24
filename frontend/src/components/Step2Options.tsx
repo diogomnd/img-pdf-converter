@@ -1,3 +1,4 @@
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { ConvertOptions } from "../types";
 
 interface Props {
@@ -42,7 +43,7 @@ export function Step2Options({ options, onChange, onBack, onNext }: Props) {
         <label className="text-xs text-gray-400 uppercase tracking-wider">Modo</label>
         <Toggle
           options={[
-            { label: "Múltiplas → 1 PDF", value: "multi" },
+            { label: "Múltiplas para 1 PDF", value: "multi" },
             { label: "1 PDF por imagem", value: "single" },
           ]}
           value={options.mode}
@@ -112,13 +113,19 @@ export function Step2Options({ options, onChange, onBack, onNext }: Props) {
           onClick={onBack}
           className="rounded-lg bg-gray-700 hover:bg-gray-600 px-6 py-2 text-sm text-gray-300 transition-colors"
         >
-          ← Voltar
+          <span className="inline-flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            Voltar
+          </span>
         </button>
         <button
           onClick={onNext}
           className="rounded-lg bg-blue-600 hover:bg-blue-500 px-6 py-2 text-sm font-semibold text-white transition-colors"
         >
-          Converter e Preview →
+          <span className="inline-flex items-center gap-2">
+            Converter e Preview
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </span>
         </button>
       </div>
     </div>

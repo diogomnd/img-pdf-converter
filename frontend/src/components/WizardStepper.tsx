@@ -1,3 +1,5 @@
+import { Check } from "lucide-react";
+
 const STEPS = ["Upload & Ordem", "Opções PDF", "Preview & Download"];
 
 export function WizardStepper({ current }: { current: number }) {
@@ -15,7 +17,7 @@ export function WizardStepper({ current }: { current: number }) {
                   : "bg-gray-700 text-gray-400"
               }`}
             >
-              {i < current ? "✓" : i + 1}
+              {i < current ? <Check className="h-4 w-4" aria-hidden="true" /> : i + 1}
             </div>
             <span
               className={`text-xs whitespace-nowrap ${
