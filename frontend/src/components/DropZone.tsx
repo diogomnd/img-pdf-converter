@@ -3,12 +3,17 @@ import { Upload } from "lucide-react";
 
 interface Props {
     onDrop: (files: File[]) => void;
+    onReject?: (message: string) => void;
 }
 
-export function DropZone({ onDrop }: Props) {
+export function DropZone({ onDrop, onReject }: Props) {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: { "image/jpeg": [".jpg", ".jpeg"], "image/png": [".png"] },
         onDrop,
+        onDropRejected: (rejections) => {
+            const names = rejections.map((r) => r.file.name).join(", ");
+            onReject?.(`Formato não suportado: ${names}. Use PNG ou JPG.`);
+        },
         multiple: true,
     });
 

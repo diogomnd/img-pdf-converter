@@ -25,7 +25,7 @@ export function Step1Upload({ images, onChange, onNext }: Props) {
         }
         setValidationError(null);
         const newItems: ImageFile[] = files.map((f) => ({
-            id: crypto.randomUUID(),
+            id: Math.random().toString(36).slice(2) + Date.now().toString(36),
             file: f,
         }));
         onChange([...images, ...newItems]);
@@ -39,7 +39,7 @@ export function Step1Upload({ images, onChange, onNext }: Props) {
                     onDismiss={() => setValidationError(null)}
                 />
             )}
-            <DropZone onDrop={handleDrop} />
+            <DropZone onDrop={handleDrop} onReject={setValidationError} />
             {images.length > 0 && (
                 <>
                     <p className="text-xs text-gray-500 uppercase tracking-wider">
