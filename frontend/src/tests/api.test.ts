@@ -9,7 +9,7 @@ describe("convertImages", () => {
 
   it("returns pdf blob on success", async () => {
     const mockBlob = new Blob(["pdf"], { type: "application/pdf" });
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       headers: { get: () => "application/pdf" },
       blob: () => Promise.resolve(mockBlob),
@@ -25,7 +25,7 @@ describe("convertImages", () => {
 
   it("returns zip type when content-type is application/zip", async () => {
     const mockBlob = new Blob(["zip"], { type: "application/zip" });
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       headers: { get: () => "application/zip" },
       blob: () => Promise.resolve(mockBlob),
@@ -38,7 +38,7 @@ describe("convertImages", () => {
   });
 
   it("throws error message from API on failure", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: false,
       json: () => Promise.resolve({ error: "Unsupported type" }),
     } as unknown as Response);
