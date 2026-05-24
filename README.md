@@ -1,4 +1,4 @@
-# image-pdf-converter
+# Image IMG-PDF Converter
 
 Convert JPEG/PNG images to PDF via a drag-and-drop web UI.
 
