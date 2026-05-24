@@ -20,7 +20,11 @@ def _jpeg(w=100, h=150) -> bytes:
 
 
 BASE_FORM = dict(
-    mode="multi", page_size="fit", orientation="portrait", margin_px="0", quality="150"
+    mode="multi",
+    page_size="fit",
+    orientation="portrait",
+    margin_px="0",
+    quality="150",
 )
 
 

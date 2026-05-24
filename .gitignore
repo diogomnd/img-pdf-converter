@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+api/.venv/
+.venv/
 api/.ruff_cache/
 api/.pytest_cache/
 api/__pycache__/

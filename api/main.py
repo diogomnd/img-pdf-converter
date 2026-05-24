@@ -63,7 +63,9 @@ async def convert(
         return Response(
             content=pdf_bytes,
             media_type="application/pdf",
-            headers={"Content-Disposition": "attachment; filename=converted.pdf"},
+            headers={
+                "Content-Disposition": "attachment; filename=converted.pdf"
+            },
         )
 
     pdfs: list[bytes] = result if isinstance(result, list) else [result]
@@ -82,5 +84,7 @@ async def convert(
     return Response(
         content=zip_bytes,
         media_type="application/zip",
-        headers={"Content-Disposition": f"attachment; filename=images-{ts}.zip"},
+        headers={
+            "Content-Disposition": f"attachment; filename=images-{ts}.zip"
+        },
     )

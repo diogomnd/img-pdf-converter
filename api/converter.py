@@ -50,7 +50,9 @@ def _process_image(
 
     if page_size == "fit":
         img.save(buf, format="JPEG", quality=95)
-        return img2pdf.convert(buf.getvalue())
+        result = img2pdf.convert(buf.getvalue())
+        assert result is not None
+        return result
 
     w_mm, h_mm = PAGE_SIZES_MM[page_size]
     if orientation == "landscape":
@@ -59,7 +61,7 @@ def _process_image(
     page_w_px = int(w_mm / MM_PER_INCH * quality_dpi)
     page_h_px = int(h_mm / MM_PER_INCH * quality_dpi)
 
-    img.thumbnail((page_w_px, page_h_px), Image.LANCZOS)
+    img.thumbnail((page_w_px, page_h_px), Image.Resampling.LANCZOS)
 
     page_canvas = Image.new("RGB", (page_w_px, page_h_px), (255, 255, 255))
     page_canvas.paste(
@@ -68,8 +70,12 @@ def _process_image(
     )
     page_canvas.save(buf, format="JPEG", quality=95)
 
-    layout_fun = img2pdf.get_layout_fun(pagesize=(w_mm * PT_PER_MM, h_mm * PT_PER_MM))
-    return img2pdf.convert(buf.getvalue(), layout_fun=layout_fun)
+    layout_fun = img2pdf.get_layout_fun(
+        pagesize=(w_mm * PT_PER_MM, h_mm * PT_PER_MM)
+    )
+    result = img2pdf.convert(buf.getvalue(), layout_fun=layout_fun)
+    assert result is not None
+    return result
 
 
 def convert_images(

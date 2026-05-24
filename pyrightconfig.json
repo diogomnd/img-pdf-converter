@@ -1,0 +1,10 @@
+{
+  "venvPath": "api",
+  "venv": ".venv",
+  "pythonVersion": "3.12",
+  "executionEnvironments": [
+    {
+      "root": "api"
+    }
+  ]
+}
