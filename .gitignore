@@ -1,3 +1,4 @@
+.superpowers/
 __pycache__/
 *.pyc
 .pytest_cache/
@@ -11,3 +12,4 @@ api/api/
 node_modules/
 dist/
 .env
+.claude/
