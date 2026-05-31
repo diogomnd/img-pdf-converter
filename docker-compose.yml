@@ -3,6 +3,7 @@ services:
     build: ./api
     expose:
       - "8000"
+    restart: unless-stopped
 
   frontend:
     build: ./frontend
@@ -10,3 +11,4 @@ services:
       - "3000:80"
     depends_on:
       - api
+    restart: unless-stopped
