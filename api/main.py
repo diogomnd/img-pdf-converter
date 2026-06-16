@@ -5,7 +5,7 @@ from typing import Annotated
 from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.responses import JSONResponse, Response
 
-from converter import convert_images, pdfs_to_zip
+from converter import PdfMergeError, convert_images, merge_pdfs, pdfs_to_zip
 
 app = FastAPI()
 
@@ -87,4 +87,43 @@ async def convert(
         headers={
             "Content-Disposition": f"attachment; filename=images-{ts}.zip"
         },
+    )
+
+
+@app.post("/api/merge-pdfs")
+async def merge_pdfs_route(pdfs: Annotated[list[UploadFile], File()]):
+    if len(pdfs) > MAX_IMAGES:
+        return JSONResponse(
+            status_code=400,
+            content={"error": f"Too many PDFs (max {MAX_IMAGES})"},
+        )
+
+    pdf_files: list[tuple[str, bytes]] = []
+    for upload in pdfs:
+        filename = upload.filename or "file.pdf"
+        is_pdf_type = upload.content_type == "application/pdf"
+        is_pdf_name = filename.lower().endswith(".pdf")
+        if not is_pdf_type and not is_pdf_name:
+            return JSONResponse(
+                status_code=400,
+                content={"error": f"Unsupported type: {upload.content_type}"},
+            )
+
+        data = await upload.read()
+        if len(data) > MAX_FILE_SIZE:
+            return JSONResponse(
+                status_code=400,
+                content={"error": f"File too large: {filename}"},
+            )
+        pdf_files.append((filename, data))
+
+    try:
+        merged = merge_pdfs(pdf_files)
+    except PdfMergeError as exc:
+        return JSONResponse(status_code=400, content={"error": str(exc)})
+
+    return Response(
+        content=merged,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "attachment; filename=merged.pdf"},
     )

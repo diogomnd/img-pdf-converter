@@ -1,6 +1,6 @@
-# Image IMG-PDF Converter
+# Image/PDF Converter
 
-Convert JPEG/PNG images to PDF via a drag-and-drop web UI.
+Convert JPEG/PNG images to PDF and merge PDF files via a drag-and-drop web UI.
 
 ## Stack
 
@@ -17,6 +17,9 @@ Convert JPEG/PNG images to PDF via a drag-and-drop web UI.
 - **Orientation**: portrait or landscape
 - **Margin** and **quality (DPI)** controls
 - Downloads single PDF or ZIP of multiple PDFs
+- Dedicated PDF merge workflow
+- Reorder and remove PDFs before merging
+- Preview and download merged PDFs
 
 ## Running
 
@@ -63,8 +66,10 @@ npm test
 | Constraint | Value |
 |---|---|
 | Max images per request | 50 |
+| Max PDFs per merge | 50 |
 | Max file size | 20 MB |
-| Accepted formats | JPEG, PNG |
+| Accepted image formats | JPEG, PNG |
+| Accepted PDF format | PDF |
 
 ## License
 

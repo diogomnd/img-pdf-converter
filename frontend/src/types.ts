@@ -1,8 +1,14 @@
 export type Mode = "multi" | "single";
 export type PageSize = "A4" | "Letter" | "fit";
 export type Orientation = "portrait" | "landscape";
+export type ToolMode = "images" | "pdfs";
 
 export interface ImageFile {
+    id: string;
+    file: File;
+}
+
+export interface PdfFile {
     id: string;
     file: File;
 }

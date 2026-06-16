@@ -30,6 +30,28 @@ export async function convertImages(
     return { blob, type };
 }
 
+export async function mergePdfs(
+    files: File[]
+): Promise<{ blob: Blob; type: "pdf" }> {
+    const formData = new FormData();
+    files.forEach((f) => formData.append("pdfs", f));
+
+    const response = await fetch("/api/merge-pdfs", {
+        method: "POST",
+        body: formData,
+    });
+
+    if (!response.ok) {
+        const data = await response
+            .json()
+            .catch(() => ({ error: "PDF merge failed" }));
+        throw new Error(data.error ?? "PDF merge failed");
+    }
+
+    const blob = await response.blob();
+    return { blob, type: "pdf" };
+}
+
 export function downloadBlob(blob: Blob, filename: string): void {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

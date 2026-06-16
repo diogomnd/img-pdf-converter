@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import App from "../App";
 
@@ -13,5 +13,15 @@ describe("App", () => {
             String.fromCodePoint(0x1f5bc)
         );
         expect(heading.querySelectorAll("svg")).toHaveLength(3);
+    });
+
+    it("switches to the PDF merge workflow", () => {
+        render(<App />);
+
+        fireEvent.click(screen.getByRole("button", { name: "Juntar PDFs" }));
+
+        expect(
+            screen.getByText("Arraste PDFs ou clique para selecionar")
+        ).toBeTruthy();
     });
 });

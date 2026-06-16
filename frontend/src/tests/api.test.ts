@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { convertImages } from "../api";
+import { convertImages, mergePdfs } from "../api";
 
 const makeFile = (name = "test.jpg", type = "image/jpeg") =>
     new File([new Uint8Array(10)], name, { type });
@@ -60,5 +60,46 @@ describe("convertImages", () => {
                 quality: 150,
             })
         ).rejects.toThrow("Unsupported type");
+    });
+});
+
+describe("mergePdfs", () => {
+    beforeEach(() => vi.resetAllMocks());
+
+    it("posts PDFs to merge endpoint and returns pdf blob", async () => {
+        const mockBlob = new Blob(["pdf"], { type: "application/pdf" });
+        globalThis.fetch = vi.fn().mockResolvedValue({
+            ok: true,
+            headers: { get: () => "application/pdf" },
+            blob: () => Promise.resolve(mockBlob),
+        } as unknown as Response);
+
+        const result = await mergePdfs([
+            makeFile("a.pdf", "application/pdf"),
+            makeFile("b.pdf", "application/pdf"),
+        ]);
+
+        expect(fetch).toHaveBeenCalledWith(
+            "/api/merge-pdfs",
+            expect.objectContaining({
+                method: "POST",
+                body: expect.any(FormData),
+            })
+        );
+        const body = (fetch as ReturnType<typeof vi.fn>).mock.calls[0][1]
+            .body as FormData;
+        expect(body.getAll("pdfs")).toHaveLength(2);
+        expect(result).toEqual({ blob: mockBlob, type: "pdf" });
+    });
+
+    it("throws merge API error message on failure", async () => {
+        globalThis.fetch = vi.fn().mockResolvedValue({
+            ok: false,
+            json: () => Promise.resolve({ error: "Invalid PDF" }),
+        } as unknown as Response);
+
+        await expect(
+            mergePdfs([makeFile("broken.pdf", "application/pdf")])
+        ).rejects.toThrow("Invalid PDF");
     });
 });

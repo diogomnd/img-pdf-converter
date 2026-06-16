@@ -15,6 +15,10 @@ PAGE_SIZES_MM: dict[str, tuple[float, float]] = {
 }
 
 
+class PdfMergeError(ValueError):
+    pass
+
+
 def _to_rgb(img: Image.Image) -> Image.Image:
     if img.mode == "RGBA":
         bg = Image.new("RGB", img.size, (255, 255, 255))
@@ -113,3 +117,31 @@ def pdfs_to_zip(filenames: list[str], pdfs: list[bytes]) -> bytes:
         for filename, pdf_bytes in zip(filenames, pdfs, strict=False):
             zf.writestr(Path(filename).stem + ".pdf", pdf_bytes)
     return buf.getvalue()
+
+
+def merge_pdfs(pdf_files: list[tuple[str, bytes]]) -> bytes:
+    writer = PdfWriter()
+
+    for filename, pdf_bytes in pdf_files:
+        try:
+            reader = PdfReader(io.BytesIO(pdf_bytes))
+        except Exception as exc:
+            raise PdfMergeError(f"Invalid PDF: {filename}") from exc
+
+        if reader.is_encrypted:
+            raise PdfMergeError(f"PDF is protected: {filename}")
+
+        try:
+            pages = list(reader.pages)
+        except Exception as exc:
+            raise PdfMergeError(f"Invalid PDF: {filename}") from exc
+
+        if not pages:
+            raise PdfMergeError(f"PDF has no pages: {filename}")
+
+        for page in pages:
+            writer.add_page(page)
+
+    out = io.BytesIO()
+    writer.write(out)
+    return out.getvalue()
